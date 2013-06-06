@@ -1,0 +1,7 @@
+Changes
+Interface.xs
+lib/Vcdiff/OpenVcdiff.pm
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+t/in_mem.t
