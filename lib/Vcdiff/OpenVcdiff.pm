@@ -33,7 +33,7 @@ Vcdiff::OpenVcdiff - open-vcdiff backend for Vcdiff
 
     my $target2 = Vcdiff::OpenVcdiff::patch($source, $delta);
 
-    ## $target2 is the same as $targe
+    ## $target2 is the same as $target
 
 This module is a backend to the L<Vcdiff> module and isn't usually used directly.
 
@@ -67,7 +67,7 @@ open-vcdiff supports re-using "hashed dictionaries" (but this module doesn't exp
 
 =item *
 
-If I understand correctly, even with the streaming API C<open-vcdiff> has a hard upper-limit of 2G file sizes and the default (which this module hasn't changed) is 64M so be warned.
+Even with the streaming API C<open-vcdiff> has a hard upper-limit of 2G file sizes and the default (which this module hasn't changed) is 64M so be warned.
 
 =back
 
@@ -84,9 +84,9 @@ L<Vcdiff-OpenVcdiff github repo|https://github.com/hoytech/Vcdiff-OpenVcdiff>
 
 L<Vcdiff>
 
-L<Official open-vcdiff website|http://code.google.com/p/open-vcdiff/>
-
 L<Alien::OpenVcdiff>
+
+L<Official open-vcdiff website|http://code.google.com/p/open-vcdiff/>
 
 
 =head1 AUTHOR
