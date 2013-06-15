@@ -2,6 +2,8 @@ package Vcdiff::OpenVcdiff;
 
 use strict;
 
+use Carp;
+
 use Vcdiff;
 
 use Alien::OpenVcdiff;
@@ -9,9 +11,102 @@ use Alien::OpenVcdiff;
 our $VERSION = '0.100';
 $VERSION = eval $VERSION;
 
-require DynaLoader;
-our @ISA = 'DynaLoader';
-__PACKAGE__->bootstrap($VERSION);
+require XSLoader;
+XSLoader::load('Vcdiff::OpenVcdiff', $VERSION);
+
+
+
+sub diff {
+  my ($source, $input, $output) = @_;
+
+  my ($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+
+  $source_fileno = $input_fileno = $output_fileno = -1;
+
+  if (!defined $source) {
+    croak "diff needs source argument";
+  } elsif (ref $source eq 'GLOB') {
+    ## FIXME: maybe can try an mmap() and allow this
+    die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
+    $source_fileno = fileno($source);
+  } else {
+    $source_str = $source;
+  }
+
+  if (!defined $input) {
+    croak "diff needs target argument";
+  } elsif (ref $input eq 'GLOB') {
+    $input_fileno = fileno($input);
+  } else {
+    $input_str = $input;
+  }
+
+  if (defined $output) {
+    croak "output argument to diff should be a file handle or undef"
+      if ref $output ne 'GLOB';
+
+    $output_fileno = fileno($output);
+  } else {
+    $output_str = '';
+  }
+
+  my $ret = _encode($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+
+  _check_ret($ret, 'diff');
+
+  return $output_str if !defined $output;
+}
+
+
+
+
+sub patch {
+  my ($source, $input, $output) = @_;
+
+  my ($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+
+  $source_fileno = $input_fileno = $output_fileno = -1;
+
+  if (!defined $source) {
+    croak "patch needs source argument";
+  } elsif (ref $source eq 'GLOB') {
+    ## FIXME: maybe can try an mmap() and allow this
+    die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
+    $source_fileno = fileno($source);
+  } else {
+    $source_str = $source;
+  }
+
+  if (!defined $input) {
+    croak "patch needs delta argument";
+  } elsif (ref $input eq 'GLOB') {
+    $input_fileno = fileno($input);
+  } else {
+    $input_str = $input;
+  }
+
+  if (defined $output) {
+    croak "output argument to patch should be a file handle or undef"
+      if ref $output ne 'GLOB';
+
+    $output_fileno = fileno($output);
+  } else {
+    $output_str = '';
+  }
+
+  my $ret = _decode($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+
+  _check_ret($ret, 'patch');
+
+  return $output_str if !defined $output;
+}
+
+
+
+sub _check_ret {
+}
+
+
 
 1;
 
