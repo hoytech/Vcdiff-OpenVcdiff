@@ -48,12 +48,16 @@ open-vcdiff supports re-using "hashed dictionaries" (but this module doesn't exp
 
 Even with the streaming API C<open-vcdiff> has a hard upper-limit of 2G file sizes and the default (which this module hasn't changed) is 64M so be warned.
 
+=item *
+
+If the source argument is a file handle, L<Vcdiff::OpenVcdiff> will try to C<mmap(2)> the entire file into memory with L<Sys::Mmap>. As well as adding a dependency, this means that source files must be able to fit in your address space. Because of the file size limitation described above, this shouldn't be an issue. See the "STREAMING API" section of L<Vcdiff> for more details.
+
 =back
 
 
 =head1 TODO
 
-Implement the streaming API and possibly the re-usable "hashed dictionary" API.
+Implement the re-usable "hashed dictionary" API.
 
 
 
