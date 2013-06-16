@@ -4,6 +4,5 @@ lib/Vcdiff/OpenVcdiff.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
-t/in_mem.t
 t/non_mmapable.t
 t/streaming.t
