@@ -27,6 +27,8 @@ my %args = (
     PREREQ_PM => {
       'Alien::OpenVcdiff' => 0,
       'Vcdiff' => 0,
+      'Sys::Mmap' => 0,
+      'Guard' => 0,
     },
     OBJECT            => 'Interface.o',
     LICENSE           => 'perl',

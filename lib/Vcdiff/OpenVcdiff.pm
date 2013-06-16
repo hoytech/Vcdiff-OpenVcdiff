@@ -3,6 +3,7 @@ package Vcdiff::OpenVcdiff;
 use strict;
 
 use Carp;
+use Guard;
 
 use Vcdiff;
 
@@ -20,14 +21,22 @@ sub diff {
   my ($source, $input, $output) = @_;
 
   my ($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my $source_str_guard;
 
   $input_fileno = $output_fileno = -1;
 
   if (!defined $source) {
     croak "diff needs source argument";
   } elsif (ref $source eq 'GLOB') {
-    ## FIXME: maybe can try an mmap() and allow this
-    die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
+    require Sys::Mmap;
+
+    if (!defined Sys::Mmap::mmap($source_str, 0, Sys::Mmap::PROT_READ(), Sys::Mmap::MAP_SHARED(), $source)) {
+      croak "unable to mmap filehandle (maybe it's a pipe or socket instead of a file): $!";
+    }
+
+    $source_str_guard = guard {
+      Sys::Mmap::munmap($source_str) || carp "failed to munmap: $!";
+    };
   } else {
     $source_str = $source;
   }
@@ -63,14 +72,22 @@ sub patch {
   my ($source, $input, $output) = @_;
 
   my ($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my $source_str_guard;
 
   $input_fileno = $output_fileno = -1;
 
   if (!defined $source) {
     croak "patch needs source argument";
   } elsif (ref $source eq 'GLOB') {
-    ## FIXME: maybe can try an mmap() and allow this
-    die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
+    require Sys::Mmap;
+
+    if (!defined Sys::Mmap::mmap($source_str, 0, Sys::Mmap::PROT_READ(), Sys::Mmap::MAP_SHARED(), $source)) {
+      croak "unable to mmap filehandle (maybe it's a pipe or socket instead of a file): $!";
+    }
+
+    $source_str_guard = guard {
+      Sys::Mmap::munmap($source_str) || carp "failed to munmap: $!";
+    };
   } else {
     $source_str = $source;
   }
@@ -98,6 +115,9 @@ sub patch {
 
   return $output_str if !defined $output;
 }
+
+
+
 
 
 my $exception_map = {
@@ -187,7 +207,7 @@ Even with the streaming API C<open-vcdiff> has a hard upper-limit of 2G file siz
 
 =head1 TODO
 
-Implement the streaming API and possibly the re-usable "hashed dictionary" API.
+Implement the re-usable "hashed dictionary" API.
 
 
 
