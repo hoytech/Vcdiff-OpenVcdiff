@@ -206,6 +206,18 @@ Even with the streaming API C<open-vcdiff> has a hard upper-limit of 2G file siz
 
 If the source argument is a file handle, L<Vcdiff::OpenVcdiff> will try to C<mmap(2)> the entire file into memory with L<Sys::Mmap>. As well as adding a dependency, this means that source files must be able to fit in your address space. Because of the file size limitation described above, this shouldn't be an issue. See the "STREAMING API" section of L<Vcdiff> for more details.
 
+=item *
+
+The L<Alien::OpenVcdiff> Takes a long time to compile compared to Xdelta3. Compiling the alien module runs open-vcdiff's test-suite which is partially to blame for this time as well (but it's worth it).
+
+=item *
+
+Not really a problem with open-vcdiff, but loading an L<Alien::Base> package for the first time seems to take a relatively long time (probably has a dependency explosion).
+
+=item *
+
+The library writes to standard error in the event of errors and I don't believe there is any way to silence these messages.
+
 =back
 
 
