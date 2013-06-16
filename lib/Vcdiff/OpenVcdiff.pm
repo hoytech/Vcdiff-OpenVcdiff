@@ -102,8 +102,29 @@ sub patch {
 }
 
 
+my $exception_map = {
+ -1 => 'not implemented',
+  1 => 'unable to initialize HashedDictionary',
+  2 => 'StartEncoding error',
+  3 => 'error reading from target/delta',
+  4 => 'EncodeChunk error',
+  5 => 'error writing to output',
+  6 => 'FinishEncoding error',
+  7 => 'DecodeChunk error',
+  8 => 'FinishDecoding error',
+  9 => 'unknown C++ exception',
+};
 
 sub _check_ret {
+  my ($ret, $func) = @_;
+
+  return unless $ret;
+
+  my $exception = $exception_map->{$ret};
+
+  croak "error in Vcdiff::OpenVcdiff::$func: $exception" if $exception;
+
+  croak "unknown error in Vcdiff::OpenVcdiff::$func ($ret)";
 }
 
 
