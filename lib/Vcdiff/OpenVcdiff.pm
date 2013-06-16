@@ -19,16 +19,15 @@ XSLoader::load('Vcdiff::OpenVcdiff', $VERSION);
 sub diff {
   my ($source, $input, $output) = @_;
 
-  my ($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my ($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
 
-  $source_fileno = $input_fileno = $output_fileno = -1;
+  $input_fileno = $output_fileno = -1;
 
   if (!defined $source) {
     croak "diff needs source argument";
   } elsif (ref $source eq 'GLOB') {
     ## FIXME: maybe can try an mmap() and allow this
     die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
-    $source_fileno = fileno($source);
   } else {
     $source_str = $source;
   }
@@ -50,7 +49,7 @@ sub diff {
     $output_str = '';
   }
 
-  my $ret = _encode($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my $ret = _encode($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
 
   _check_ret($ret, 'diff');
 
@@ -63,16 +62,15 @@ sub diff {
 sub patch {
   my ($source, $input, $output) = @_;
 
-  my ($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my ($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
 
-  $source_fileno = $input_fileno = $output_fileno = -1;
+  $input_fileno = $output_fileno = -1;
 
   if (!defined $source) {
     croak "patch needs source argument";
   } elsif (ref $source eq 'GLOB') {
     ## FIXME: maybe can try an mmap() and allow this
     die "Vcdiff::OpenVcdiff::diff: source can't be a filehandle";
-    $source_fileno = fileno($source);
   } else {
     $source_str = $source;
   }
@@ -94,7 +92,7 @@ sub patch {
     $output_str = '';
   }
 
-  my $ret = _decode($source_fileno, $source_str, $input_fileno, $input_str, $output_fileno, $output_str);
+  my $ret = _decode($source_str, $input_fileno, $input_str, $output_fileno, $output_str);
 
   _check_ret($ret, 'patch');
 
@@ -103,7 +101,6 @@ sub patch {
 
 
 my $exception_map = {
- -1 => 'not implemented',
   1 => 'unable to initialize HashedDictionary',
   2 => 'StartEncoding error',
   3 => 'error reading from target/delta',

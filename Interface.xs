@@ -21,19 +21,14 @@ extern "C" {
 #define BUF_SIZE 65536
 
 
-int encode(int source_fd, SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_sv) {
+int encode(SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_sv) {
   std::auto_ptr<open_vcdiff::HashedDictionary> hashed_dictionary;
+  char *source_str;
+  size_t source_str_size;
 
-  if (source_fd != -1) {
-    return -1; // not impl
-  } else {
-    char *source_str;
-    size_t source_str_size;
-
-    source_str_size = SvCUR(source_sv);
-    source_str = SvPV(source_sv, source_str_size);
-    hashed_dictionary.reset(new open_vcdiff::HashedDictionary(source_str, source_str_size));
-  }
+  source_str_size = SvCUR(source_sv);
+  source_str = SvPV(source_sv, source_str_size);
+  hashed_dictionary.reset(new open_vcdiff::HashedDictionary(source_str, source_str_size));
 
   if (!hashed_dictionary->Init()) {
     return 1;
@@ -114,23 +109,19 @@ int encode(int source_fd, SV *source_sv, int input_fd, SV *input_sv, int output_
 }
 
 
-int decode(int source_fd, SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_sv) {
+int decode(SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_sv) {
   open_vcdiff::VCDiffStreamingDecoder decoder;
 
-  if (source_fd != -1) {
-    return -1; // not impl
-  } else {
-    char *source_str;
-    size_t source_str_size;
+  char *source_str;
+  size_t source_str_size;
 
-    source_str_size = SvCUR(source_sv);
-    source_str = SvPV(source_sv, source_str_size);
+  source_str_size = SvCUR(source_sv);
+  source_str = SvPV(source_sv, source_str_size);
 
-    decoder.StartDecoding(source_str, source_str_size);
-  }
+  decoder.StartDecoding(source_str, source_str_size);
+
 
   std::string output_string;
-
 
   char *ibuf_ptr = NULL;
   std::string ibuf_str;
@@ -212,8 +203,7 @@ PROTOTYPES: ENABLE
 
 
 int
-_encode(source_fd, source_sv, input_fd, input_sv, output_fd, output_sv)
-        int source_fd
+_encode(source_sv, input_fd, input_sv, output_fd, output_sv)
         SV *source_sv
         int input_fd
         SV *input_sv
@@ -221,7 +211,7 @@ _encode(source_fd, source_sv, input_fd, input_sv, output_fd, output_sv)
         SV *output_sv
     CODE:
         try {
-          RETVAL = encode(source_fd, source_sv,
+          RETVAL = encode(source_sv,
                           input_fd, input_sv,
                           output_fd, output_sv);
         } catch(...) {
@@ -235,8 +225,7 @@ _encode(source_fd, source_sv, input_fd, input_sv, output_fd, output_sv)
 
 
 int
-_decode(source_fd, source_sv, input_fd, input_sv, output_fd, output_sv)
-        int source_fd
+_decode(source_sv, input_fd, input_sv, output_fd, output_sv)
         SV *source_sv
         int input_fd
         SV *input_sv
@@ -244,7 +233,7 @@ _decode(source_fd, source_sv, input_fd, input_sv, output_fd, output_sv)
         SV *output_sv
     CODE:
         try {
-          RETVAL = decode(source_fd, source_sv,
+          RETVAL = decode(source_sv,
                           input_fd, input_sv,
                           output_fd, output_sv);
         } catch(...) {
