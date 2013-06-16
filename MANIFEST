@@ -5,5 +5,5 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 t/in_mem.t
-t/streaming.t
 t/non_mmapable.t
+t/streaming.t
