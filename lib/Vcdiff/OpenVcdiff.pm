@@ -9,7 +9,7 @@ use Vcdiff;
 
 use Alien::OpenVcdiff;
 
-our $VERSION = '0.100';
+our $VERSION = '0.102';
 $VERSION = eval $VERSION;
 
 require XSLoader;

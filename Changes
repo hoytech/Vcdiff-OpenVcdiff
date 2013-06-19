@@ -1,2 +1,6 @@
+0.102   2013-06-18
+  * Use new test infrastructure
+  * Improve docs
+
 0.100   2013-06-16
   * Initial release

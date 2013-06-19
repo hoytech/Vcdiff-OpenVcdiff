@@ -26,7 +26,7 @@ my %args = (
     LIBS              => $libs,
     PREREQ_PM => {
       'Alien::OpenVcdiff' => 0,
-      'Vcdiff' => 0,
+      'Vcdiff' => '0.500',
       'Sys::Mmap' => 0,
       'Guard' => 0,
     },
