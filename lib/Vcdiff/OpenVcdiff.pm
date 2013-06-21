@@ -7,7 +7,7 @@ use Guard;
 
 use Vcdiff;
 
-our $VERSION = '0.102';
+our $VERSION = '0.105';
 $VERSION = eval $VERSION;
 
 require XSLoader;
