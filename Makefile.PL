@@ -30,6 +30,14 @@ my %args = (
       'Sys::Mmap' => 0,
       'Guard' => 0,
     },
+    CONFIGURE_REQUIRES => {
+      'ExtUtils::MakeMaker' => 0,
+      'Alien::OpenVcdiff' => 0,
+    },
+    BUILD_REQUIRES => {
+      'ExtUtils::MakeMaker' => 0,
+      'Alien::OpenVcdiff' => 0,
+    },
     OBJECT            => 'Interface.o',
     LICENSE           => 'perl',
     dist => {
