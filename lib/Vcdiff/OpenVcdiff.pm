@@ -204,11 +204,7 @@ If the source argument is a file handle, L<Vcdiff::OpenVcdiff> will try to C<mma
 
 =item *
 
-The L<Alien::OpenVcdiff> Takes a long time to compile compared to L<Xdelta3> although it's not a completely fair comparison because the alien module also runs open-vcdiff's test-suite (which is good).
-
-=item *
-
-Not really a problem with open-vcdiff, but loading an L<Alien::Base> package for the first time seems to take a relatively long time (probably has a big dependency tree).
+The L<Alien::OpenVcdiff> dependency takes a long time to compile compared to L<Vcdiff::Xdelta3> although it's not a completely fair comparison because the alien module also runs open-vcdiff's test-suite (which is good).
 
 =item *
 
