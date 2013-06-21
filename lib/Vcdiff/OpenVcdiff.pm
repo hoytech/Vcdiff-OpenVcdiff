@@ -7,8 +7,6 @@ use Guard;
 
 use Vcdiff;
 
-use Alien::OpenVcdiff;
-
 our $VERSION = '0.102';
 $VERSION = eval $VERSION;
 
