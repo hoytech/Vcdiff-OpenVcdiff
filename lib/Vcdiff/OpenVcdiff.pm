@@ -43,6 +43,7 @@ sub diff {
     croak "diff needs target argument";
   } elsif (ref $input eq 'GLOB') {
     $input_fileno = fileno($input);
+    croak "target file handle is closed or invalid" if !defined $input_fileno || $input_fileno == -1;
   } else {
     $input_str = $input;
   }
@@ -52,6 +53,7 @@ sub diff {
       if ref $output ne 'GLOB';
 
     $output_fileno = fileno($output);
+    croak "output file handle is closed or invalid" if !defined $output_fileno || $output_fileno == -1;
   } else {
     $output_str = '';
   }
@@ -94,6 +96,7 @@ sub patch {
     croak "patch needs delta argument";
   } elsif (ref $input eq 'GLOB') {
     $input_fileno = fileno($input);
+    croak "delta file handle is closed or invalid" if !defined $input_fileno || $input_fileno == -1;
   } else {
     $input_str = $input;
   }
@@ -103,6 +106,7 @@ sub patch {
       if ref $output ne 'GLOB';
 
     $output_fileno = fileno($output);
+    croak "output file handle is closed or invalid" if !defined $output_fileno || $output_fileno == -1;
   } else {
     $output_str = '';
   }
