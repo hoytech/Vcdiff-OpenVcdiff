@@ -52,7 +52,6 @@ int encode(SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_
 
   if (input_fd != -1) {
     ibuf_str.resize(BUF_SIZE);
-    lseek(input_fd, 0, SEEK_SET); // ignore errors: FIXME: consider if we should even do this
   } else {
     input_str_size = SvCUR(input_sv);
     input_str_ptr = SvPV(input_sv, input_str_size);
@@ -131,7 +130,6 @@ int decode(SV *source_sv, int input_fd, SV *input_sv, int output_fd, SV *output_
 
   if (input_fd != -1) {
     ibuf_str.resize(BUF_SIZE);
-    lseek(input_fd, 0, SEEK_SET); // ignore errors: FIXME: consider if we should even do this
   } else {
     input_str_size = SvCUR(input_sv);
     input_str_ptr = SvPV(input_sv, input_str_size);
