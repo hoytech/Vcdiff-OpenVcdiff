@@ -27,6 +27,7 @@ my %args = (
       'Vcdiff' => '0.500',
       'Sys::Mmap' => 0,
       'Guard' => 0,
+      'Carp' => 0,
     },
     CONFIGURE_REQUIRES => {
       'ExtUtils::MakeMaker' => 0,
