@@ -10,11 +10,9 @@ my $openvcdiff = Alien::OpenVcdiff->new;
 my $libs = $openvcdiff->libs;
 my $cflags = $openvcdiff->cflags;
 
-if ($cflags =~ m{^-I\S*google/?$}) {
-  $cflags .= '/../';
-} else {
-  die "Unexpected value from Alien::OpenVcdiff::cflags: $cflags";
-}
+## Hack: Alien::Base is returning one directory too deep
+## for the include path we need...
+$cflags =~ s{(-I\S+)/google\b}{$1/};
 
 
 my %args = (
